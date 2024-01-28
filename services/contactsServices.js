@@ -6,6 +6,16 @@ export const getAll = async () => {
 };
 
 export const createContact = async (data) => {
+  const isContactExist = await Contact.findOne({ number: data.number });
+
+  if (isContactExist) {
+    return {
+      error: {
+        message: "Contact with this number is already exist",
+      },
+    };
+  }
+
   const response = await Contact.create({ ...data });
   return response;
 };
