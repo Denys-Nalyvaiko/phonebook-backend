@@ -9,4 +9,7 @@ export const createContactSchema = Joi.object({
     .messages({ "any.required": "Number field is required" }),
 });
 
-export const updateContactSchema = Joi.object({});
+export const updateContactSchema = Joi.object({
+  name: Joi.string(),
+  number: Joi.string(),
+});

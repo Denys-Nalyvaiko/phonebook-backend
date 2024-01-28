@@ -24,3 +24,10 @@ export const removeContact = async (id) => {
   const response = await Contact.findByIdAndDelete(id);
   return response;
 };
+
+export const updateContact = async (id, data) => {
+  const updatedContact = await Contact.findByIdAndUpdate(id, data, {
+    new: true,
+  });
+  return updatedContact;
+};
