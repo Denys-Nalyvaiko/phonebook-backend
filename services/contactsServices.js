@@ -19,3 +19,8 @@ export const createContact = async (data) => {
   const response = await Contact.create({ ...data });
   return response;
 };
+
+export const removeContact = async (id) => {
+  const response = await Contact.findByIdAndDelete(id);
+  return response;
+};
