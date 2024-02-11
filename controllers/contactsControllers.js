@@ -8,7 +8,7 @@ import HttpError from "../helpers/HttpError.js";
 
 export const getAllContacts = async (req, res, next) => {
   try {
-    const result = await getAll();
+    const result = await getAll(req.user._id);
     res.json(result);
   } catch (error) {
     console.log(error);
@@ -18,7 +18,7 @@ export const getAllContacts = async (req, res, next) => {
 
 export const addContact = async (req, res, next) => {
   try {
-    const result = await createContact(req.body);
+    const result = await createContact(req.body, req.user._id);
     if (result.error) {
       throw HttpError(409, result.error.message);
     }
@@ -32,7 +32,7 @@ export const addContact = async (req, res, next) => {
 export const deleteContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await removeContact(contactId);
+    const result = await removeContact(contactId, req.user._id);
 
     if (!result) {
       throw HttpError(404, `Contact with id ${contactId} is not found`);
@@ -47,7 +47,11 @@ export const deleteContact = async (req, res, next) => {
 
 export const renewContact = async (req, res, next) => {
   try {
-    const contact = await updateContact(req.params.contactId, req.body);
+    const contact = await updateContact(
+      req.params.contactId,
+      req.body,
+      req.user._id
+    );
 
     if (!contact) {
       throw HttpError(

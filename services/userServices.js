@@ -26,3 +26,19 @@ export const createUser = async (userData) => {
 
   return newUser;
 };
+
+export const loginUser = async (userId) => {
+  const token = jwt.sign({ id: userId }, SECRET_KEY, { expiresIn: "5h" });
+
+  const newUser = await User.findByIdAndUpdate(
+    userId,
+    { token },
+    { new: true }
+  );
+
+  return newUser;
+};
+
+export const logoutUser = async (userId) => {
+  await User.findByIdAndUpdate(userId, { token: "" });
+};
