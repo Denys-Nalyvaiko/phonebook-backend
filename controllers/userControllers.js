@@ -1,6 +1,9 @@
+import gravatar from "gravatar";
+import path from "path";
+import fs from "fs/promises";
 import HttpError from "../helpers/HttpError.js";
 import * as userServices from "../services/userServices.js";
-import gravatar from "gravatar";
+import { User } from "../db/models/usersModel.js";
 
 export const registerController = async (req, res, next) => {
   const { email, name } = req.body;
@@ -69,6 +72,32 @@ export const getCurrentUserController = async (req, res, next) => {
     const { name, email, avatarURL } = req.user;
 
     res.json({ name, email, avatarURL });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateAvatar = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+
+    if (!req.file) {
+      throw HttpError(400, "You must upload avatar");
+    }
+
+    const { path: tempPath, originalname } = req.file;
+    const fileName = `${_id}_${originalname}`;
+
+    const avatarDir = path.resolve("public", "avatar");
+    const resultDir = path.resolve(avatarDir, fileName);
+
+    await fs.rename(tempPath, resultDir);
+
+    const avatarURL = path.join("avatar", fileName);
+
+    await User.findByIdAndUpdate(_id, { avatarURL });
+
+    res.json({ avatarURL });
   } catch (error) {
     next(error);
   }
