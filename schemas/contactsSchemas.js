@@ -7,6 +7,7 @@ export const createContactSchema = Joi.object({
   number: Joi.string()
     .required()
     .messages({ "any.required": "Number field is required" }),
+  id: Joi.string(),
 });
 
 export const updateContactSchema = Joi.object({

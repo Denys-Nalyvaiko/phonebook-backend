@@ -102,3 +102,14 @@ export const updateAvatar = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateName = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    const { name } = req.body;
+    const user = await User.findByIdAndUpdate(_id, { name }, { new: true });
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+};

@@ -37,3 +37,9 @@ userRouter.patch(
   upload.single("avatar"),
   userControllers.updateAvatar
 );
+
+userRouter.patch(
+  "/updateName",
+  userMiddlewares.checkIfValidToken,
+  userControllers.updateName
+);
